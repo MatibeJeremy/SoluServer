@@ -35,4 +35,9 @@ class Task extends Model
      * @var array<string, string>
      */
     protected $casts = [];
+
+    public function Status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
 }

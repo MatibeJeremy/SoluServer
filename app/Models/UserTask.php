@@ -38,4 +38,14 @@ class UserTask extends Model
      * @var array<string, string>
      */
     protected $casts = [];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'task_id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'status_id');
+    }
 }
