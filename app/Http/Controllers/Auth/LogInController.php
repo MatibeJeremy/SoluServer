@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -37,7 +40,7 @@ class LogInController extends Controller
      */
     public function login(Request $request){
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
+            'email_address' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
@@ -51,7 +54,7 @@ class LogInController extends Controller
         }
 
         // get authentication token
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('email_address', 'password');
         $token = $this->guard()->attempt($credentials);
 
         // login successfully
@@ -80,8 +83,8 @@ class LogInController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'user' => new User($user),
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
+            'user' => new UserResource($user),
+            'expires_in' => 70 * 60
         ], 200);
     }
 
