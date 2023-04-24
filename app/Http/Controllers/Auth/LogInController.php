@@ -84,7 +84,7 @@ class LogInController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'user' => new UserResource($user),
-            'expires_in' => 70 * 60
+            'expires_in' => $this->guard()->factory()->getTTL() * 60
         ], 200);
     }
 
