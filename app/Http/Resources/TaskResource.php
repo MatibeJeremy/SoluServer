@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 class TaskResource extends JsonResource
 {
@@ -16,7 +17,7 @@ class TaskResource extends JsonResource
      */
     public function toArray($request)
     {
-        $query = Status('id', '=', $this->status_id)->get();
+        $query = DB::table('statuses')->where('id', $this->status_id)->get();
         return [
             'name' => $this->name,
             'description' => $this->description,

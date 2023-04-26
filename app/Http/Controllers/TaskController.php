@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\Status;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -81,9 +82,11 @@ class TaskController extends Controller
         $status->save();
         $task->status_id = $status->id;        
         $task->save();
+        $query = DB::table('statuses')->where('id', $status->id);
 
         return response()->json([
-            'data' => $task,
+            'task' => $task,
+            'status' => $query,
             'message' => 'Successfully made task.',
             'status' => 'Success'
         ], 201);
