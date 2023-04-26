@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject; 
 
-class Task extends Model implements JWTSubject
+class Task extends Model
 {
     use HasApiTokens, HasFactory;
 
@@ -23,38 +23,5 @@ class Task extends Model implements JWTSubject
         'status_id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-    ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [];
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
-    public function toArray()
-    {
-        return parent::toArray();
-    }
-
-    // public function Status()
-    // {
-    //     return $this->belongsTo(Status::class, 'status_id');
-    // }
 }

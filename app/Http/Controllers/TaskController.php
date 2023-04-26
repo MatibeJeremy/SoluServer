@@ -83,8 +83,8 @@ class TaskController extends Controller
         $task->save();
 
         return response()->json([
-            'data' => TaskResource::collection($task),
-            'message' => 'Successfully made transaction.',
+            'data' => $task,
+            'message' => 'Successfully made task.',
             'status' => 'Success'
         ], 201);
     }
