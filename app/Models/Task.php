@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject; 
 
-class Task extends Model
+class Task extends Model implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -36,8 +38,23 @@ class Task extends Model
      */
     protected $casts = [];
 
-    public function Status()
+    public function getJWTIdentifier()
     {
-        return $this->belongsTo(Status::class, 'status_id');
+        return $this->getKey();
     }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function toArray()
+    {
+        return parent::toArray();
+    }
+
+    // public function Status()
+    // {
+    //     return $this->belongsTo(Status::class, 'status_id');
+    // }
 }

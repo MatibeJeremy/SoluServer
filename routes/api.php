@@ -22,7 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['jwt.verify']], function (){
     // accounts routes
     Route::group(['prefix' => 'tasks'], function() {
-        Route::get('/', 'TaskController@admin');
+        Route::get('/', 'App\Http\Controllers\TaskController@admin');
+        Route::post('/', 'App\Http\Controllers\TaskController@store');
     });
 });
 

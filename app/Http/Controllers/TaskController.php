@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Task;
+use App\Models\Status;
+use App\Http\Resources\TaskResource;
+use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -19,7 +23,7 @@ class TaskController extends Controller
      * @return JsonResponse
      */
     public function admin(){
-        $tasks = $this->task->admin();
+        $tasks = $this->task->all();
         return response()->json([
             'data' => TaskResource::collection($tasks),
             'message' => 'Successfully loaded all Tasks for user: '.$this->user->name,
@@ -48,7 +52,41 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // get transaction creation data
+        $task_input = $request->all();
+
+        $validator = Validator::make($task_input, [
+            'name' => 'required',
+            'description' => 'required',
+            'due_date' => 'required',
+        ]);
+
+        //check if request is valid
+        if ($validator->fails()){
+            return response()->json([
+                'error' => [
+                    'message' => $validator->messages()->first(),
+                    'status' => 'Fail'
+                ]
+            ], 422);
+        }
+
+        // create task
+        $task = new Task();
+        $status = new Status();
+        $task->name = $task_input['name'];
+        $task->description = $task_input['description'];
+        $task->due_date = $task_input['due_date'];
+        $status->name = $task_input['description'];
+        $status->save();
+        $task->status_id = $status->id;        
+        $task->save();
+
+        return response()->json([
+            'data' => TaskResource::collection($task),
+            'message' => 'Successfully made transaction.',
+            'status' => 'Success'
+        ], 201);
     }
 
     /**
